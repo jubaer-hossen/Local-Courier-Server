@@ -39,6 +39,13 @@ async function run() {
             res.send(service);
         });
 
+        // Get Order Api
+        app.get('/orders', async (req, res) => {
+            const cursor = orderCollection.find({});
+            const service = await cursor.toArray();
+            res.send(service);
+        });
+
         // Get Single Service
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
@@ -58,6 +65,16 @@ async function run() {
             res.json(result);
         });
 
+        // ADD ORDERS API
+        app.post('/shipping', async (req, res) => {
+            const service = req.body;
+            console.log('hit the post api', service);
+
+            const result = await orderCollection.insertOne(service);
+            // console.log(result);
+            res.json(result);
+        });
+
         // DELETE API
         app.delete('/services/:id', async (req, res) => {
             const id = req.params.id;
@@ -66,12 +83,20 @@ async function run() {
             res.json(result);
         });
 
-        // ADD ORDERS API
-        app.post('/orders', async (req, res) => {
-            const order = req.body;
-            console.log('order', order);
-            res.send('order processed');
+        // DELETE Order API
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await orderCollection.deleteOne(query);
+            res.json(result);
         });
+
+        // ADD ORDERS API
+        // app.post('/orders', async (req, res) => {
+        //     const order = req.body;
+        //     console.log('order', order);
+        //     res.send('order processed');
+        // });
     } finally {
         // await client.close();
     }
