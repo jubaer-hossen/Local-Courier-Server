@@ -30,6 +30,7 @@ async function run() {
         // console.log('connected to database');
         const database = client.db('Couriers');
         const servicesCollection = database.collection('services');
+        const orderCollection = database.collection('orders');
 
         // Get Api
         app.get('/services', async (req, res) => {
@@ -63,6 +64,13 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const result = await servicesCollection.deleteOne(query);
             res.json(result);
+        });
+
+        // ADD ORDERS API
+        app.post('/orders', async (req, res) => {
+            const order = req.body;
+            console.log('order', order);
+            res.send('order processed');
         });
     } finally {
         // await client.close();
