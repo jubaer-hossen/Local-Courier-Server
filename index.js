@@ -76,17 +76,21 @@ async function run() {
         });
 
         // UPDATE API
-        app.put('/allOrders/:id', async (req, res) => {
+        app.put('/orders/:id', async (req, res) => {
             const id = req.params.id;
             const updateOrder = req.body;
-            const filter = {_id: ObjectId(id)}
-            const option = { upsert: true }
+            const filter = { _id: ObjectId(id) };
+            const option = { upsert: true };
             const updateDoc = {
                 $set: {
-                    orderCondition: 
-                }
-            }
-            const result = await orderCollection.updateOne(filter, updateDoc, option)
+                    orderCondition: 'Approved',
+                },
+            };
+            const result = await orderCollection.updateOne(
+                filter,
+                updateDoc,
+                option
+            );
             console.log(id, 'updated order');
             res.json(result);
         });
